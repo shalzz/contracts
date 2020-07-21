@@ -2,7 +2,6 @@
 
 pragma solidity ^0.6.11;
 
-
 contract WalletMock {
     /// @dev Ether can be deposited from any source, so this contract must be payable by anyone.
     receive() external payable {}
@@ -12,7 +11,7 @@ contract WalletMock {
     }
 
     function sendValue(address payable _to, uint256 _amount) external {
-        (bool success, ) = _to.call{value: _amount }("");
+        (bool success, ) = _to.call{value: _amount}("");
         require(success, "sendValue failed");
     }
 }
