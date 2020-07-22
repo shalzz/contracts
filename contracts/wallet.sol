@@ -568,23 +568,6 @@ contract Wallet is ENSResolvable, AddressWhitelist, SpendLimit, GasTopUpLimit, L
         _;
     }
 
-    /// @dev This is a bulk transfer convenience function, used to migrate contracts.
-    /// @notice If any of the transfers fail, this will revert.
-    /// @param _to is the recipient's address, can't be the zero (0x0) address: transfer() will revert.
-    /// @param _assets is an array of addresses of ERC20 tokens or 0x0 for ether.
-    function bulkTransfer(address payable _to, address[] calldata _assets) external onlyOwnerOrSelf {
-        // check to make sure that _assets isn't empty
-        require(_assets.length != 0, "asset array is empty");
-        // This loops through all of the transfers to be made
-        for (uint256 i = 0; i < _assets.length; i++) {
-            uint256 amount = _balance(_assets[i]);
-            // use our safe, daily limit protected transfer
-            transfer(_to, _assets[i], amount);
-        }
-
-        emit BulkTransferred(_to, _assets);
-    }
-
     /// @dev This function allows for the controller to relay transactions on the owner's behalf,
     /// the relayed message has to be signed by the owner.
     /// @param _nonce only used for relayed transactions, must match the wallet's relayNonce.
